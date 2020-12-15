@@ -1,4 +1,4 @@
-import internalIp from "internal-ip";
+// import internalIp from "internal-ip";
 import { Client } from "node-ssdp";
 import fetch from "node-fetch";
 import xml2js from "xml2js";
@@ -20,46 +20,44 @@ async function discover() {
   return Array.from(devices);
 }
 
-enum Prop {
-  Name = "name",
-  State = "state",
-}
-
-interface Get {
+interface Options {
   address: string;
-  prop: Prop;
+  prop: string;
 }
 
-async function get({ address, prop }: Get) {
+async function ping(options: Options) {
   try {
-    let action;
-    switch (prop) {
+    let property;
+    switch (options.prop) {
       case "name":
-        action = "FriendlyName";
+        property = "FriendlyName";
         break;
       case "state":
-        action = "BinaryState";
+        property = "BinaryState";
         break;
     }
-    const response = await fetch(`${address}/upnp/control/basicevent1`, {
-      method: "post",
-      headers: {
-        "Content-Type": 'text/xml; charset="utf-8"',
-        SOAPACTION: `"urn:Belkin:service:basicevent:1#Get${action}"`,
-      },
-      body: `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    const response = await fetch(
+      `${options.address}/upnp/control/basicevent1`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": 'text/xml; charset="utf-8"',
+          SOAPACTION: `"urn:Belkin:service:basicevent:1#Get${property}"`,
+        },
+        body: `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
               <s:Body>
-                  <u:Get${action} xmlns:u="urn:Belkin:service:basicevent:1"></u:Get${action}>
+                  <u:Get${property} xmlns:u="urn:Belkin:service:basicevent:1"></u:Get${property}>
               </s:Body>
             </s:Envelope>`,
-    });
+      }
+    );
     const xml = await response.text();
     const json = await xml2js.parseStringPromise(xml);
     const value =
-      json["s:Envelope"]["s:Body"][0][`u:Get${action}Response`][0][
-        `${action}`
+      json["s:Envelope"]["s:Body"][0][`u:Get${property}Response`][0][
+        `${property}`
       ][0];
-    if (prop === "state") {
+    if (options.prop === "state") {
       return Number(value);
     } else {
       return value;
@@ -70,10 +68,18 @@ async function get({ address, prop }: Get) {
 }
 
 const main = async () => {
-  const ip = await internalIp.v4();
-  console.log(ip);
+  // const ip = await internalIp.v4();
   const addresses = await discover();
-  console.log(addresses);
+  const devices = await Promise.all(
+    addresses.map(async (address) => {
+      return Promise.resolve({
+        name: await ping({ address: address as string, prop: "name" }),
+        address: address,
+        state: await ping({ address: address as string, prop: "state" }),
+      });
+    })
+  );
+  console.log(devices);
 };
 
 main().catch((error) => console.error(error));
