@@ -33,13 +33,21 @@ const main = async () => {
     console.log(`server started on http://localhost:${PORT}`);
   });
 
+  app.get("/api", (_, res) => {
+    res.send("hello from the API server.");
+  });
+
   app
     .use(parser.xml())
     .all("/wemo", (request, response) => {
       const sid = request.headers.sid;
-      const binaryState = request.body["e:propertyset"]["e:property"][0];
-      console.log(sid, binaryState);
-      response.sendStatus(200);
+      if (sid) {
+        const binaryState = request.body["e:propertyset"]["e:property"][0];
+        console.log(sid, binaryState);
+        response.sendStatus(200);
+      } else {
+        response.send("hello from the API server.");
+      }
     })
     .listen(`${+PORT + 1}`, () =>
       console.log(`event listener running on on port ${+PORT + 1}`)
