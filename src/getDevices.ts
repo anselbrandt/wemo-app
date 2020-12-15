@@ -64,6 +64,11 @@ async function ping(options: Options) {
   }
 }
 
+interface Device {
+  name: string;
+  address: string;
+  state: boolean;
+}
 export const getDevices = async () => {
   const addresses = await discover();
   const devices = await Promise.all(
@@ -72,7 +77,7 @@ export const getDevices = async () => {
         name: await ping({ address: address as string, prop: "name" }),
         address: address,
         state: await ping({ address: address as string, prop: "state" }),
-      });
+      } as Device);
     })
   );
   return devices;
