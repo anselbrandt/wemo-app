@@ -33,6 +33,10 @@ const main = async () => {
     res.send("hello from the API server.");
   });
 
+  app.get("/api/:device/:state/", function (req, res) {
+    res.send(`${req.params.device} light state ${req.params.state}`);
+  });
+
   app.use(parser.xml()).all("/wemo", (request, response) => {
     const sid = request.headers.sid;
     if (sid) {
