@@ -5,9 +5,9 @@ import http from "http";
 const path = require("path");
 import bodyParser from "body-parser";
 import bodyParserXml from "body-parser-xml";
-// import internalIp from "internal-ip";
-// import { getDevices } from "./getDevices";
-// import { subscribe } from "./subscribe";
+import internalIp from "internal-ip";
+import { getDevices } from "./getDevices";
+import { subscribe } from "./subscribe";
 
 const PORT = process.env.PORT || 4000;
 
@@ -15,13 +15,26 @@ const main = async () => {
   bodyParserXml(bodyParser);
   const parser: any = bodyParser;
 
-  // const devices = await getDevices();
-  // console.log(devices);
-  // const ip = await internalIp.v4();
-  // console.log("server ip:", ip);
-  // devices.forEach((device) => {
-  //   subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
-  // });
+  const encode = (string: string) => {
+    const noSpace = string.toLowerCase().replace(/\s/g, "-");
+    return encodeURI(noSpace);
+  };
+
+  const devicesMap = new Map();
+
+  const devices = await getDevices();
+  console.log(devices);
+  const ip = await internalIp.v4();
+  console.log("server ip:", ip);
+  devices.forEach((device) => {
+    const name = encode(device.name);
+    devicesMap.set(name, {
+      name: device.name,
+      address: device.address,
+      endpoint: `/api/${name}`,
+    });
+    subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
+  });
 
   const app = express();
   app.use(express.static(path.join(__dirname, "../web/build")));
@@ -29,8 +42,31 @@ const main = async () => {
     res.sendFile(path.join(__dirname + "../web/build/index.html"));
   });
 
-  app.get("/api", (_, res) => {
-    res.send("hello from the API server.");
+  app.get("/api", async (_, res) => {
+    const devices = await getDevices();
+    console.log(devices);
+    const ip = await internalIp.v4();
+    console.log("server ip:", ip);
+    for (const index in devices) {
+      const name = await encode(devices[index].name);
+      await devicesMap.set(name, {
+        name: devices[index].name,
+        address: devices[index].address,
+        endpoint: name,
+      });
+      await subscribe({
+        address: devices[index].address,
+        ip: ip!,
+        port: `${PORT}`,
+      });
+    }
+    const devicesNames = await Array.from(devicesMap.values()).map(
+      (device) => ({
+        name: device.name,
+        endpoint: `/api/${device.endpoint}`,
+      })
+    );
+    res.send(devicesNames);
   });
 
   app.get("/api/:device/", function (req, res) {
