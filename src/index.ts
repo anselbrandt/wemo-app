@@ -8,6 +8,7 @@ import bodyParserXml from "body-parser-xml";
 import internalIp from "internal-ip";
 import { getDevices } from "./getDevices";
 import { subscribe } from "./subscribe";
+import { setDevice } from "./setDevice";
 
 const PORT = process.env.PORT || 4000;
 
@@ -77,12 +78,11 @@ const main = async () => {
     const device = req.params.device;
     const state = req.params.state;
     if (state === "on" || state === "off") {
-      res.send({
-        device: device,
-        state: state,
-      });
+      const address = devicesMap.get(device).address;
+      setDevice({ address: address, state: state });
+      res.send("ok");
     } else {
-      res.send("not a recognized state");
+      res.send("whoops");
     }
   });
 
