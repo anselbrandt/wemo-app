@@ -3,8 +3,7 @@ import { colors } from "./colors";
 import { hexToHsl } from "./utils/colorUtils";
 
 export const ColorBlocks: React.FC = () => {
-  const colorPicker = (hex: any) =>
-    hexToHsl(hex)[2].toFixed(0) < 50 ? "white" : "black";
+  const colorPicker = (hex: any) => (hexToHsl(hex)[2] < 50 ? "white" : "black");
   return (
     <>
       {Object.keys(colors).map((color) => (
