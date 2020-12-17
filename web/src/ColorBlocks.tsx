@@ -1,13 +1,22 @@
 import React from "react";
-import { palette } from "./palette";
+import { colors } from "./colors";
 
 export const ColorBlocks: React.FC = () => {
-  const hues = palette.map((hue) => Object.keys(hue));
-  const colors = palette.map((hue) => Object.values(hue));
   return (
     <>
-      {hues.map((hue) => (
-        <div>{hue}</div>
+      {Object.keys(colors).map((color) => (
+        <div>
+          <div>{color}</div>
+          <div>
+            {typeof colors[color] !== "string" ? (
+              Object.keys(colors[color]).map((hue, index) => (
+                <div>{`${hue}: ${colors[color][index]}`}</div>
+              ))
+            ) : (
+              <div>{colors[color]}</div>
+            )}
+          </div>
+        </div>
       ))}
     </>
   );
