@@ -10,10 +10,14 @@ export const ColorBlocks: React.FC = () => {
           <div>
             {typeof colors[color] !== "string" ? (
               Object.keys(colors[color]).map((hue, index) => (
-                <div>{`${hue}: ${colors[color][index]}`}</div>
+                <div
+                  style={{ backgroundColor: colors[color][index] }}
+                >{`${hue}: ${colors[color][index]}`}</div>
               ))
             ) : (
-              <div>{colors[color]}</div>
+              <div style={{ backgroundColor: colors[color] as string }}>
+                {colors[color]}
+              </div>
             )}
           </div>
         </div>
