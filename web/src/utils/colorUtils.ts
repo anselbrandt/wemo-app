@@ -67,3 +67,14 @@ export const hexToHsl = (hex: any) => {
   const hsl = rgbToHsl(rgb);
   return hsl;
 };
+
+export const hexToLightness = (hex: any) => {
+  const rgb = hexToRgb(hex);
+  const r = rgb[0] / 255;
+  const g = rgb[1] / 255;
+  const b = rgb[2] / 255;
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
+  const lightness = ((min + max) / 2) * 100;
+  return lightness;
+};
