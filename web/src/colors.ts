@@ -1,3 +1,5 @@
+// https://javisperez.github.io/tailwindcolorshades/?blue-ribbon=5468ff
+
 interface Palette {
   [shade: number]: string;
 }
@@ -9,7 +11,7 @@ interface Color {
 export const colors: Color = {
   white: "#fff",
   black: "#000",
-  nebula: "#5468ff",
+  // nebula: "#5468ff",
   moon: "#f5f5fa",
   asteroid: "#dddfed",
   proton: "#c5c9e0",
@@ -18,6 +20,20 @@ export const colors: Color = {
   solstice: "#3a416f",
   cosmos: "#21243d",
   antimatter: "#0b0f20",
+
+  nebula: {
+    50: "#f6f7ff",
+    100: "#eef0ff",
+    200: "#d4d9ff",
+    300: "#bbc3ff",
+    400: "#8795ff",
+    500: "#5468ff",
+    600: "#4c5ee6",
+    700: "#3f4ebf",
+    800: "#323e99",
+    900: "#29337d",
+  },
+
   neptune: {
     0: "#3944a0",
     1: "#565db6",
