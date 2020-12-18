@@ -1,16 +1,16 @@
 import React from "react";
-import { ColorBlocks } from "./ColorBlocks";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Box, Grid } from "@chakra-ui/react";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Home } from "./Home";
+import { ThemeColors } from "./ThemeColors";
+import { About } from "./About";
 
 function App() {
   return (
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <ColorBlocks />
-      </Grid>
-    </Box>
+    <BrowserRouter>
+      <Route path="/" exact component={Home} />
+      <Route path="/colors" exact component={ThemeColors} />
+      <Route path="/about" exact component={About} />
+    </BrowserRouter>
   );
 }
 
