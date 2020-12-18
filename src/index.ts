@@ -39,9 +39,6 @@ const main = async () => {
 
   const app = express();
   app.use(express.static(path.join(__dirname, "../web/build")));
-  app.get("/", (_, res) => {
-    res.sendFile(path.join(__dirname + "../web/build/index.html"));
-  });
 
   app.get("/api", async (_, res) => {
     const devices = await getDevices();
@@ -95,6 +92,10 @@ const main = async () => {
     } else {
       response.send("whoops");
     }
+  });
+
+  app.get(["/", "/*"], (_, res) => {
+    res.sendFile(path.join(__dirname, "../web/build/index.html"));
   });
 
   const httpServer = http.createServer(app);
