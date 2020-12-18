@@ -33,6 +33,7 @@ const main = async () => {
       name: device.name,
       address: device.address,
       endpoint: `/api/${name}`,
+      state: device.state,
     });
     subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
   });
@@ -51,6 +52,7 @@ const main = async () => {
         name: devices[index].name,
         address: devices[index].address,
         endpoint: name,
+        state: devices[index].state,
       });
       await subscribe({
         address: devices[index].address,
@@ -62,6 +64,7 @@ const main = async () => {
       (device) => ({
         name: device.name,
         endpoint: `/api/${device.endpoint}`,
+        state: device.state,
       })
     );
     res.send(devicesNames);
