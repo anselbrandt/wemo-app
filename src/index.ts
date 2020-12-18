@@ -42,6 +42,12 @@ const main = async () => {
   app.use(express.static(path.join(__dirname, "../web/build")));
 
   app.get("/api", async (_, res) => {
+    const devicesNames = Array.from(devicesMap.values()).map((device) => ({
+      name: device.name,
+      endpoint: `/api/${device.endpoint}`,
+      state: device.state,
+    }));
+    res.send(devicesNames);
     const devices = await getDevices();
     console.log(devices);
     const ip = await internalIp.v4();
@@ -60,14 +66,6 @@ const main = async () => {
         port: `${PORT}`,
       });
     }
-    const devicesNames = await Array.from(devicesMap.values()).map(
-      (device) => ({
-        name: device.name,
-        endpoint: `/api/${device.endpoint}`,
-        state: device.state,
-      })
-    );
-    res.send(devicesNames);
   });
 
   app.get("/api/:device/", function (req, res) {
