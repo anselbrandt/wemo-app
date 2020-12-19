@@ -67,6 +67,7 @@ async function ping(options: Options) {
 interface Device {
   name: string;
   address: string;
+  endpoint: string;
   state: boolean;
 }
 export const getDevices = async () => {

@@ -57,7 +57,7 @@ const main = async () => {
       await devicesMap.set(name, {
         name: devices[index].name,
         address: devices[index].address,
-        endpoint: name,
+        endpoint: devices[index].endpoint,
         state: devices[index].state,
       });
       await subscribe({
