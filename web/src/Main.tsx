@@ -9,10 +9,19 @@ interface Props {}
 export const Main: React.FC<Props> = () => {
   const [deviceState, setDeviceState] = useState<any[]>([]);
 
+  const handleSetDeviceState = (address: string, state: string) => {
+    fetch(`http://localhost:4000${address}/${state}`);
+  };
+
   const handleClick = (device: any) => {
     setDeviceState((prev) =>
       prev.map((entry) => {
         if (entry.name === device.name) {
+          if (entry.state) {
+            handleSetDeviceState(entry.endpoint, "off");
+          } else {
+            handleSetDeviceState(entry.endpoint, "on");
+          }
           return {
             name: entry.name,
             endpoint: entry.endpoint,
@@ -32,7 +41,7 @@ export const Main: React.FC<Props> = () => {
       const json: any[] = [
         { name: "Nightlight", endpoint: "/api/nightlight", state: 0 },
         { name: "Dresser", endpoint: "/api/dresser", state: 0 },
-        { name: "Piano", endpoint: "/api/piano", state: 1 },
+        { name: "Piano", endpoint: "/api/piano", state: 0 },
         { name: "Living", endpoint: "/api/living", state: 0 },
         { name: "Corner", endpoint: "/api/corner", state: 0 },
         { name: "Kitchen", endpoint: "/api/kitchen", state: 0 },
