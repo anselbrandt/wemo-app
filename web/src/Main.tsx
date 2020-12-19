@@ -3,6 +3,7 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Box, Flex, Grid, Link as ChakraLink } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { ControlPanel } from "./ControlPanel";
+import { Test } from "./Test";
 
 interface Props {}
 
@@ -54,6 +55,7 @@ export const Main: React.FC<Props> = () => {
           h="100vh"
           maxH="60rem"
         >
+          <Test />
           <ControlPanel devices={deviceState} handleClick={handleClick} />
           <ChakraLink as={Link} to="/about" color="nebula" mt={10}>
             about
