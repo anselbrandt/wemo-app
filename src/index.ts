@@ -45,6 +45,7 @@ const main = async () => {
     const devicesNames = Array.from(devicesMap.values()).map((device) => ({
       name: device.name,
       endpoint: device.endpoint,
+      address: device.address,
       state: device.state,
     }));
     res.send(devicesNames);
