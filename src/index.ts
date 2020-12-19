@@ -50,22 +50,33 @@ const main = async () => {
     res.send(devicesNames);
     const devices = await getDevices();
     console.log(devices);
-    const ip = await internalIp.v4();
-    console.log("server ip:", ip);
-    for (const index in devices) {
-      const name = await encode(devices[index].name);
-      await devicesMap.set(name, {
-        name: devices[index].name,
-        address: devices[index].address,
-        endpoint: devices[index].endpoint,
-        state: devices[index].state,
+    devices.forEach((device) => {
+      const name = encode(device.name);
+      devicesMap.set(name, {
+        name: device.name,
+        address: device.address,
+        endpoint: `/api/${name}`,
+        state: device.state,
       });
-      await subscribe({
-        address: devices[index].address,
-        ip: ip!,
-        port: `${PORT}`,
-      });
-    }
+      subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
+    });
+
+    // synchronous for sending fresh device state
+    //
+    // for (const index in devices) {
+    //   const name = await encode(devices[index].name);
+    //   await devicesMap.set(name, {
+    //     name: devices[index].name,
+    //     address: devices[index].address,
+    //     endpoint: devices[index].endpoint,
+    //     state: devices[index].state,
+    //   });
+    //   await subscribe({
+    //     address: devices[index].address,
+    //     ip: ip!,
+    //     port: `${PORT}`,
+    //   });
+    // }
   });
 
   app.get("/api/:device/", function (req, res) {
