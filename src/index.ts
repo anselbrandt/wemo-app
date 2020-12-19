@@ -44,7 +44,7 @@ const main = async () => {
   app.get("/api", async (_, res) => {
     const devicesNames = Array.from(devicesMap.values()).map((device) => ({
       name: device.name,
-      endpoint: `/api/${device.endpoint}`,
+      endpoint: device.endpoint,
       state: device.state,
     }));
     res.send(devicesNames);
