@@ -14,6 +14,7 @@ import fs from "fs/promises";
 
 const PORT = process.env.PORT || 4000;
 const HOSTNAME = os.hostname();
+const LOGGING = false;
 
 const main = async () => {
   bodyParserXml(bodyParser);
@@ -27,27 +28,32 @@ const main = async () => {
   const devicesMap = new Map();
   const deviceNames = new Map();
 
-  const devices = await getDevices();
-  console.log(devices);
   const ip = await internalIp.v4();
-  console.log("server ip:", ip);
-  devices.forEach(async (device) => {
-    const name = encode(device.name);
-    const sid = await subscribe({
-      address: device.address,
-      ip: ip!,
-      port: `${PORT}`,
+  if (LOGGING) console.log("server ip:", ip);
+
+  const updateDevices = async () => {
+    const devices = await getDevices();
+    if (LOGGING) console.log(devices);
+    devices.forEach(async (device) => {
+      const name = encode(device.name);
+      const sid = await subscribe({
+        address: device.address,
+        ip: ip!,
+        port: `${PORT}`,
+      });
+      if (LOGGING) console.log("subscribed to: ", name);
+      await deviceNames.set(sid, name);
+      await devicesMap.set(name, {
+        name: device.name,
+        sid: sid,
+        address: device.address,
+        endpoint: `/api/${name}`,
+        state: device.state,
+      });
     });
-    console.log("subscribed to: ", name);
-    await deviceNames.set(sid, name);
-    await devicesMap.set(name, {
-      name: device.name,
-      sid: sid,
-      address: device.address,
-      endpoint: `/api/${name}`,
-      state: device.state,
-    });
-  });
+  };
+
+  updateDevices();
 
   const app = express();
   app.use(express.static(path.join(__dirname, "../web/build")));
@@ -67,42 +73,7 @@ const main = async () => {
       state: device.state,
     }));
     res.send(devicesNames);
-    const devices = await getDevices();
-    console.log(devices);
-    devices.forEach(async (device) => {
-      const name = encode(device.name);
-      const sid = await subscribe({
-        address: device.address,
-        ip: ip!,
-        port: `${PORT}`,
-      });
-      console.log("subscribed to: ", name);
-      await deviceNames.set(sid, name);
-      await devicesMap.set(name, {
-        name: device.name,
-        sid: sid,
-        address: device.address,
-        endpoint: `/api/${name}`,
-        state: device.state,
-      });
-    });
-
-    // synchronous for sending fresh device state
-    //
-    // for (const index in devices) {
-    //   const name = await encode(devices[index].name);
-    //   await devicesMap.set(name, {
-    //     name: devices[index].name,
-    //     address: devices[index].address,
-    //     endpoint: devices[index].endpoint,
-    //     state: devices[index].state,
-    //   });
-    //   await subscribe({
-    //     address: devices[index].address,
-    //     ip: ip!,
-    //     port: `${PORT}`,
-    //   });
-    // }
+    updateDevices();
   });
 
   app.get("/api/:device/", function (req, res) {
@@ -129,7 +100,7 @@ const main = async () => {
       const state = +binaryState.BinaryState[0];
       const name = deviceNames.get(sid);
       if (name) {
-        console.log(`device event: ${name}, state:`, +state);
+        if (LOGGING) console.log(`device event: ${name}, state:`, +state);
         const device = devicesMap.get(name);
         device.state = state;
         devicesMap.set(name, device);
@@ -145,7 +116,7 @@ const main = async () => {
 
   const httpServer = http.createServer(app);
   httpServer.listen(PORT, () => {
-    console.log(`server started on ${HOSTNAME}:${PORT}`);
+    console.log(`💡 wemo remote at http://${HOSTNAME}:${PORT}`);
   });
 };
 
