@@ -18,7 +18,7 @@ export const Markdown: React.FC<Props> = () => {
   const { colorMode } = useColorMode();
   const linkColor = {
     light: colors.nebula[500],
-    dark: colors.nebula[200],
+    dark: colors.nebula[400],
   };
   const codeColor = {
     light: colors.solstice as string,
