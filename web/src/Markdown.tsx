@@ -5,6 +5,7 @@ import gfm from "remark-gfm";
 import { createUseStyles } from "react-jss";
 import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
 import { SERVER_URL } from "./constants";
+import { colors } from "./colors";
 
 interface StyleProps {
   [prop: string]: string;
@@ -16,12 +17,21 @@ export const Markdown: React.FC<Props> = () => {
   const [readme, setReadme] = useState<string | undefined>();
   const { colorMode } = useColorMode();
   const linkColor = {
-    light: "nebula.500",
-    dark: "nebula.200",
+    light: colors.nebula[500],
+    dark: colors.nebula[200],
   };
-  const codeColor = { light: "gray.600", dark: "gray.400" };
-  const bordColor = { light: "gray.400", dark: "gray.600" };
-  const bgColor = { light: "gray.200", dark: "gray.700" };
+  const codeColor = {
+    light: colors.solstice as string,
+    dark: colors.proton as string,
+  };
+  const bordColor = {
+    light: colors.telluric as string,
+    dark: colors.nova as string,
+  };
+  const bgColor = {
+    light: colors.asteroid as string,
+    dark: colors.cosmos as string,
+  };
 
   const [styleProps, setStyleProps] = useState<StyleProps>();
 
