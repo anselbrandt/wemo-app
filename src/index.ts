@@ -22,20 +22,27 @@ const main = async () => {
   };
 
   const devicesMap = new Map();
+  const deviceNames = new Map();
 
   const devices = await getDevices();
   console.log(devices);
   const ip = await internalIp.v4();
   console.log("server ip:", ip);
-  devices.forEach((device) => {
+  devices.forEach(async (device) => {
     const name = encode(device.name);
-    devicesMap.set(name, {
+    const sid = await subscribe({
+      address: device.address,
+      ip: ip!,
+      port: `${PORT}`,
+    });
+    await deviceNames.set(sid, name);
+    await devicesMap.set(name, {
       name: device.name,
+      sid: sid,
       address: device.address,
       endpoint: `/api/${name}`,
       state: device.state,
     });
-    subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
   });
 
   const app = express();
@@ -45,21 +52,26 @@ const main = async () => {
     const devicesNames = Array.from(devicesMap.values()).map((device) => ({
       name: device.name,
       endpoint: device.endpoint,
-      address: device.address,
       state: device.state,
     }));
     res.send(devicesNames);
     const devices = await getDevices();
     console.log(devices);
-    devices.forEach((device) => {
+    devices.forEach(async (device) => {
       const name = encode(device.name);
-      devicesMap.set(name, {
+      const sid = await subscribe({
+        address: device.address,
+        ip: ip!,
+        port: `${PORT}`,
+      });
+      await deviceNames.set(sid, name);
+      await devicesMap.set(name, {
         name: device.name,
+        sid: sid,
         address: device.address,
         endpoint: `/api/${name}`,
         state: device.state,
       });
-      subscribe({ address: device.address, ip: ip!, port: `${PORT}` });
     });
 
     // synchronous for sending fresh device state
@@ -99,9 +111,14 @@ const main = async () => {
   app.use(parser.xml()).all("/wemo", (request, response) => {
     const sid = request.headers.sid;
     if (sid) {
-      const binaryState = request.body["e:propertyset"]["e:property"][0];
-      console.log(sid, binaryState);
       response.sendStatus(200);
+      const binaryState = request.body["e:propertyset"]["e:property"][0];
+      const state = +binaryState.BinaryState[0];
+      const name = deviceNames.get(sid);
+      console.log(name, state);
+      const device = devicesMap.get(name);
+      device.state = state;
+      devicesMap.set(name, device);
     } else {
       response.send("whoops");
     }

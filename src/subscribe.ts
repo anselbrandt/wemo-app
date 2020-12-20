@@ -16,5 +16,5 @@ export const subscribe = async (options: Options) => {
     },
   });
   console.log("Subscribed to: ", response.headers.get("sid"));
-  return response.headers.get("sid").replace("uuid:", "");
+  return response.headers.get("sid");
 };
