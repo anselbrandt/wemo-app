@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { createUseStyles } from "react-jss";
 import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
-import { SERVER_URL } from "./constants";
 import { colors } from "./colors";
 
 interface StyleProps {
@@ -116,7 +115,7 @@ export const Markdown: React.FC<Props> = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`${SERVER_URL}/readme`);
+      const response = await fetch("/readme");
       const text = await response.text();
       setReadme(text);
     })();
