@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
+import os from "os";
 import express from "express";
 import http from "http";
 const path = require("path");
@@ -12,6 +13,7 @@ import { setDevice } from "./setDevice";
 import fs from "fs/promises";
 
 const PORT = process.env.PORT || 4000;
+const HOSTNAME = os.hostname();
 
 const main = async () => {
   bodyParserXml(bodyParser);
@@ -36,6 +38,7 @@ const main = async () => {
       ip: ip!,
       port: `${PORT}`,
     });
+    console.log("subscribed to: ", name);
     await deviceNames.set(sid, name);
     await devicesMap.set(name, {
       name: device.name,
@@ -73,6 +76,7 @@ const main = async () => {
         ip: ip!,
         port: `${PORT}`,
       });
+      console.log("subscribed to: ", name);
       await deviceNames.set(sid, name);
       await devicesMap.set(name, {
         name: device.name,
@@ -124,10 +128,12 @@ const main = async () => {
       const binaryState = request.body["e:propertyset"]["e:property"][0];
       const state = +binaryState.BinaryState[0];
       const name = deviceNames.get(sid);
-      console.log(name, state);
-      const device = devicesMap.get(name);
-      device.state = state;
-      devicesMap.set(name, device);
+      if (name) {
+        console.log(`device event: ${name}, state:`, +state);
+        const device = devicesMap.get(name);
+        device.state = state;
+        devicesMap.set(name, device);
+      }
     } else {
       response.send("whoops");
     }
@@ -139,7 +145,7 @@ const main = async () => {
 
   const httpServer = http.createServer(app);
   httpServer.listen(PORT, () => {
-    console.log(`server started on http://localhost:${PORT}`);
+    console.log(`server started on ${HOSTNAME}:${PORT}`);
   });
 };
 

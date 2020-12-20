@@ -15,6 +15,5 @@ export const subscribe = async (options: Options) => {
       TIMEOUT: "Second-600",
     },
   });
-  console.log("Subscribed to: ", response.headers.get("sid"));
   return response.headers.get("sid");
 };
