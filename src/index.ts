@@ -9,6 +9,7 @@ import internalIp from "internal-ip";
 import { getDevices } from "./getDevices";
 import { subscribe } from "./subscribe";
 import { setDevice } from "./setDevice";
+import fs from "fs/promises";
 
 const PORT = process.env.PORT || 4000;
 
@@ -47,6 +48,14 @@ const main = async () => {
 
   const app = express();
   app.use(express.static(path.join(__dirname, "../web/build")));
+
+  app.get("/readme", async (_, res) => {
+    const file = await fs.readFile(
+      path.join(__dirname, "../src/wemo.md"),
+      "utf-8"
+    );
+    res.send(file);
+  });
 
   app.get("/api", async (_, res) => {
     const devicesNames = Array.from(devicesMap.values()).map((device) => ({

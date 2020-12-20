@@ -3,6 +3,7 @@ import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Box, Flex, Grid, Link as ChakraLink } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { ControlPanel } from "./ControlPanel";
+import { SERVER_URL } from "./constants";
 
 interface Props {}
 
@@ -10,7 +11,7 @@ export const Main: React.FC<Props> = () => {
   const [deviceState, setDeviceState] = useState<any[]>([]);
 
   const handleSetDeviceState = (address: string, state: string) => {
-    fetch(`http://mini.local:4000${address}/${state}`);
+    fetch(`${SERVER_URL}${address}/${state}`);
   };
 
   const handleClick = (device: any) => {
@@ -36,7 +37,7 @@ export const Main: React.FC<Props> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://mini.local:4000/api");
+      const response = await fetch(`${SERVER_URL}/api`);
       const json = await response.json();
       setDeviceState(json);
     };

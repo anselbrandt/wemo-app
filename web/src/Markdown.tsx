@@ -1,18 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, useColorMode, Text, Link as ChakraLink } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { createUseStyles } from "react-jss";
-import { useState } from "react";
 import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
+import { SERVER_URL } from "./constants";
 
-const wemo = `# Wemo Markdown File
-
-## Subheading
-
-### Section Heading
-
-`;
 interface StyleProps {
   [prop: string]: string;
 }
@@ -20,6 +13,7 @@ interface StyleProps {
 interface Props {}
 
 export const Markdown: React.FC<Props> = () => {
+  const [readme, setReadme] = useState<string | undefined>();
   const { colorMode } = useColorMode();
   const linkColor = {
     light: "nebula.500",
@@ -89,7 +83,7 @@ export const Markdown: React.FC<Props> = () => {
     const classes = useStyles(props);
     return (
       <Box className={classes.markdown} mt="4rem" maxWidth="48rem">
-        <ReactMarkdown plugins={[gfm]} source={wemo} />
+        {readme && <ReactMarkdown plugins={[gfm]} source={readme} />}
       </Box>
     );
   };
@@ -109,6 +103,14 @@ export const Markdown: React.FC<Props> = () => {
       codeColor: codeColor[colorMode],
     });
   }, [colorMode]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${SERVER_URL}/readme`);
+      const text = await response.text();
+      setReadme(text);
+    })();
+  }, []);
 
   return (
     <>
