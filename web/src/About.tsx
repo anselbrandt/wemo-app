@@ -14,7 +14,7 @@ export const About: React.FC<Props> = () => {
       </Flex>
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Readme />
-        <ChakraLink as={Link} to="/">
+        <ChakraLink as={Link} to="/" mb={20}>
           home
         </ChakraLink>
       </Flex>
