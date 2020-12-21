@@ -12,7 +12,7 @@ interface StyleProps {
 
 interface Props {}
 
-export const Markdown: React.FC<Props> = () => {
+export const Readme: React.FC<Props> = () => {
   const [readme, setReadme] = useState<string | undefined>();
   const { colorMode } = useColorMode();
   const linkColor = {

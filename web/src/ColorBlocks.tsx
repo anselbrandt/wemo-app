@@ -1,6 +1,5 @@
 import React from "react";
 import { colors } from "./colors";
-// import { colors } from "./chakraColors";
 import { hexToLightness } from "./utils/colorUtils";
 
 export const ColorBlocks: React.FC = () => {
