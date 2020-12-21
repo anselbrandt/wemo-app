@@ -20,7 +20,7 @@ Actions, services, and device attributes are exposed at each device's XML entryp
 
 ### \* Important - SOAPACTION header MUST include double quotes (" ") around action
 
-### GetFriendlyName
+## GetFriendlyName
 
 Submit an HTTP Post request to `/upnp/control/basicevent1` with the following headers:
 
@@ -52,7 +52,7 @@ Response:
 </s:Envelope>
 ```
 
-### GetBinaryState (On/Off Status)
+## GetBinaryState (On/Off Status)
 
 Submit an HTTP Post request to `/upnp/control/basicevent1` with the following headers:
 
@@ -84,7 +84,7 @@ Response:
 </s:Envelope>
 ```
 
-### SetBinaryState (Turn Wemo On/Off)
+## SetBinaryState (Turn Wemo On/Off)
 
 Submit an HTTP Post request to `upnp/control/basicevent1` with the following headers:
 
@@ -132,7 +132,7 @@ Or to turn the Wemo off:
 </s:Envelope>`
 ```
 
-### Subscribe to Device Events
+## Subscribe to Device Events
 
 Once subscribed to, a device will emit changes in state (on/off) to a callback URL. Subsequent notifications must receive a an HTTP status code 200, otherwise further notifications will not be sent.
 
