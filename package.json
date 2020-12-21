@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "cd web && yarn && yarn build",
-    "prestart": "cd web && yarn build",
+    "prestart": "tsc && cd web && yarn build",
     "build": "tsc",
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
