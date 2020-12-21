@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd web && yarn && yarn build",
+    "postinstall": "cd web && yarn",
     "prestart": "tsc && cd web && yarn build",
     "build": "tsc",
     "watch": "tsc -w",
