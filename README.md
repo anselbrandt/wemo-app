@@ -2,15 +2,21 @@
 
 ![Wemo Switch](https://github.com/anselbrandt/wemo-app/blob/master/wemo.jpeg?raw=true)
 
-I have 6 first genereation Wemo Switches. They work okay. Like a lot of cloud connected IoT devices, the offical Wemo app insists on connecting to the cloud to control my devices locally, even when I'm on the same wifi network as the switches, and obviously at home. This can be annoying if there are network issues, or the Wemo cloud server is down or unresponsive. You shouldn't have to connect to the internet to use a light switch.
+I have 6 first genereation Wemo Switches. They work okay. Like a lot of cloud connected IoT devices, the offical Wemo app insists on connecting to the cloud to control my devices locally. This can be annoying if there are network issues, or the Wemo cloud server is unresponsive. You shouldn't have to connect to the internet to use a light switch.
 
-As of 2020, you are now required to log in to the Wemo app to control your devices, and your authentication seems to expire at random intervals. This was now enough to compel me to write my own Wemo app. Turns out, it's not that hard. Fortunately, Wemo uses an open API and standard protocols. You can read about them [here](https://github.com/anselbrandt/wemo-app/blob/master/src/wemo.md).
+As of 2020, you are now required to log in to the Wemo app to control your devices, and your authentication seems to expire at random intervals. This was enough to compel me to write my own Wemo app. Turns out, it's not that hard. Fortunately, Wemo uses an open API and standard protocols. You can read about them [here](https://github.com/anselbrandt/wemo-app/blob/master/src/wemo.md).
 
-If you want to use this app, you need some type of server on your local network that is capable of running Node.js. A Raspberry Pi would make an ideal candidate, or any desktop that is always on.
+If you want to use this app, you need some type of server on your local network that is capable of running [Node.js](https://nodejs.org/en/). A Raspberry Pi would make an ideal candidate, or any desktop that is always on.
 
-The server will act as bridge to your devices, and serve a single-page web app you can access from any computer or device on your network.
+The server will act as a bridge to your devices, and serve a single-page web app you can access from any computer or device on your network.
 
 Currently, the app is not full-featured, and limited to triggering On/Off events You will still need the official app to set up your devices, access over the cloud, or use more advanced features. Feel free to fork this repo and add any feature you like.
+
+## Requirements
+
+[Node.js](https://nodejs.org/en/)
+
+[Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 ## How to use
 
