@@ -12,6 +12,10 @@ The server will act as a bridge to your devices, and serve a single-page web app
 
 Currently, the app is not full-featured, and limited to triggering On/Off events You will still need the official app to set up your devices, access over the cloud, or use more advanced features. Feel free to fork this repo and add any feature you like.
 
+![Screenshot](https://github.com/anselbrandt/wemo-app/blob/master/screenshot.png?raw=true)
+
+Once installed, you should be able to see something like this. If all your devices don't immediately appear, refresh the page.
+
 ## Requirements
 
 [Node.js](https://nodejs.org/en/)
