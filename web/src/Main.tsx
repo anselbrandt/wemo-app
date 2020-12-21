@@ -55,7 +55,7 @@ export const Main: React.FC<Props> = () => {
           maxH="60rem"
         >
           <ControlPanel devices={deviceState} handleClick={handleClick} />
-          <ChakraLink as={Link} to="/about" color="nebula" mt={10}>
+          <ChakraLink as={Link} to="/about" color="nebula" mt={20}>
             about
           </ChakraLink>
         </Flex>
