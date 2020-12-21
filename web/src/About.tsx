@@ -10,7 +10,9 @@ export const About: React.FC<Props> = () => {
   return (
     <Box>
       <Flex justifyContent="flex-end">
-        <ColorModeSwitcher />
+        <Box p={3}>
+          <ColorModeSwitcher />
+        </Box>
       </Flex>
       <Flex direction="column" justifyContent="center" alignItems="center">
         <Readme />
