@@ -42,7 +42,7 @@ const main = async () => {
         port: `${PORT}`,
       });
       if (LOGGING) console.log("subscribed to: ", name);
-      await deviceNames.set(sid, name);
+      await deviceNames.set(name, sid);
       await devicesMap.set(name, {
         name: device.name,
         sid: sid,
@@ -92,13 +92,21 @@ const main = async () => {
     }
   });
 
+  const getKey = (value: string, mapObj: any) => {
+    const arr = Array.from(mapObj.entries());
+    const key = arr
+      .filter((entry: any) => entry[1] === value)
+      .map((value: any) => value[0])[0];
+    return key ? key : false;
+  };
+
   app.use(parser.xml()).all("/wemo", (request, response) => {
     const sid = request.headers.sid;
     if (sid) {
       response.sendStatus(200);
       const binaryState = request.body["e:propertyset"]["e:property"][0];
       const state = +binaryState.BinaryState[0];
-      const name = deviceNames.get(sid);
+      const name = getKey(sid as string, deviceNames);
       if (name) {
         if (LOGGING) console.log(`device event: ${name}, state:`, +state);
         const device = devicesMap.get(name);
