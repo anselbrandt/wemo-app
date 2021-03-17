@@ -39,7 +39,7 @@ export const Readme: React.FC<Props> = () => {
       width: "100%",
       padding: "2rem",
       "& a": {
-        color: props.linkColor,
+        color: (props as any).linkColor,
       },
       "& a:hover": {
         textDecoration: "underline",
@@ -54,41 +54,41 @@ export const Readme: React.FC<Props> = () => {
       "& h2": { fontSize: "2rem", fontWeight: "bold", marginBottom: "1rem" },
       "& h3": { fontSize: "1.35rem", marginBottom: "1rem" },
       "& code": {
-        color: props.codeColor,
-        backgroundColor: props.bgColor,
+        color: (props as any).codeColor,
+        backgroundColor: (props as any).bgColor,
       },
       "& pre": {
-        color: props.codeColor,
-        backgroundColor: props.bgColor,
+        color: (props as any).codeColor,
+        backgroundColor: (props as any).bgColor,
         padding: "1rem",
         border: "1px solid",
-        borderColor: props.bordColor,
+        borderColor: (props as any).bordColor,
         overflow: "scroll",
         marginBottom: "1rem",
       },
       "& table": {
-        color: props.codeColor,
-        backgroundColor: props.bgColor,
+        color: (props as any).codeColor,
+        backgroundColor: (props as any).bgColor,
         padding: "1rem",
         border: "1px solid",
-        borderColor: props.bordColor,
+        borderColor: (props as any).bordColor,
         overflow: "scroll",
         marginBottom: "1rem",
       },
       "& th": {
         padding: ".5rem",
         border: "1px solid",
-        borderColor: props.bordColor,
+        borderColor: (props as any).bordColor,
       },
       "& td": {
         padding: ".5rem",
         border: "1px solid",
-        borderColor: props.bordColor,
+        borderColor: (props as any).bordColor,
       },
     }),
   });
 
-  const Markdown = ({ ...props }) => {
+  const Markdown = (props:any) => {
     const classes = useStyles(props);
     return (
       <Box className={classes.markdown} mt="4rem" maxWidth="48rem">

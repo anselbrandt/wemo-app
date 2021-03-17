@@ -6,7 +6,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { colors } from "./colors";
 
 const theme = extendTheme({
-  colors: colors,
+  colors:colors as any
 });
 
 ReactDOM.render(
